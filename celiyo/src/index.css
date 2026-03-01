@@ -9,9 +9,44 @@
   padding: 0;
 }
 
+/* ─── Theme Variables ─────────────────────────────────────────────────────── */
+:root {
+  --bg-base: #0A0A0A;
+  --bg-card: #111111;
+  --bg-pain: #1A0A0A;
+  --border: #222222;
+  --border-input: #333333;
+  --border-btn: #444444;
+  --border-pain: #3A1A1A;
+  --border-accent: #FFFFFF;
+  --text-primary: #FFFFFF;
+  --text-muted: #888888;
+  --text-dim: #555555;
+  --text-pain: #CC4444;
+  --slider-thumb: #FFFFFF;
+  --slider-track: #333333;
+}
+
+.light {
+  --bg-base: #F2F2F2;
+  --bg-card: #FFFFFF;
+  --bg-pain: #FFF5F5;
+  --border: #E5E7EB;
+  --border-input: #D1D5DB;
+  --border-btn: #9CA3AF;
+  --border-pain: #FCA5A5;
+  --border-accent: #111111;
+  --text-primary: #111111;
+  --text-muted: #6B7280;
+  --text-dim: #9CA3AF;
+  --text-pain: #DC2626;
+  --slider-thumb: #111111;
+  --slider-track: #D1D5DB;
+}
+
 body {
-  background-color: #0A0A0A;
-  color: #FFFFFF;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
   font-family: 'Inter', system-ui, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
@@ -26,10 +61,10 @@ body {
   width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #111111;
+  background: var(--bg-card);
 }
 ::-webkit-scrollbar-thumb {
-  background: #333333;
+  background: var(--border-input);
   border-radius: 2px;
 }
 
@@ -39,7 +74,7 @@ input[type="range"] {
   appearance: none;
   width: 100%;
   height: 2px;
-  background: #333333;
+  background: var(--slider-track);
   border-radius: 1px;
   outline: none;
   cursor: pointer;
@@ -50,7 +85,7 @@ input[type="range"]::-webkit-slider-thumb {
   appearance: none;
   width: 14px;
   height: 14px;
-  background: #FFFFFF;
+  background: var(--slider-thumb);
   border-radius: 50%;
   cursor: pointer;
   transition: transform 0.1s;
@@ -63,7 +98,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 input[type="range"]::-moz-range-thumb {
   width: 14px;
   height: 14px;
-  background: #FFFFFF;
+  background: var(--slider-thumb);
   border-radius: 50%;
   cursor: pointer;
   border: none;

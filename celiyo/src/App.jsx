@@ -3,7 +3,7 @@ import {
   LineChart, Line, AreaChart, Area, XAxis, YAxis, Tooltip as RechartsTooltip,
   ResponsiveContainer, CartesianGrid
 } from 'recharts'
-import { Star, Menu, X, ChevronDown } from 'lucide-react'
+import { Star, Menu, X, ChevronDown, Sun, Moon } from 'lucide-react'
 
 // ─── Formatting Helpers ───────────────────────────────────────────────────────
 const inr = (n) => {
@@ -62,10 +62,10 @@ function Slider({ label, value, onChange, description, star = false }) {
     <div className="mb-4">
       <div className="flex items-center justify-between mb-1.5">
         <div className="flex items-center gap-1.5">
-          <span className="text-sm text-white font-medium">{label}</span>
-          {star && <Star size={12} className="text-white fill-white" />}
+          <span className="text-sm text-[var(--text-primary)] font-medium">{label}</span>
+          {star && <Star size={12} className="text-[var(--text-primary)] fill-[var(--text-primary)]" />}
         </div>
-        <span className="text-sm font-mono text-white tabular-nums w-8 text-right">{value}</span>
+        <span className="text-sm font-mono text-[var(--text-primary)] tabular-nums w-8 text-right">{value}</span>
       </div>
       <input
         type="range"
@@ -76,7 +76,7 @@ function Slider({ label, value, onChange, description, star = false }) {
         className="w-full"
       />
       {description && (
-        <p className="text-xs text-[#888888] mt-1">{description}</p>
+        <p className="text-xs text-[var(--text-muted)] mt-1">{description}</p>
       )}
     </div>
   )
@@ -87,16 +87,16 @@ function ProgressBar({ value, max = 100, label, sublabel, inverse = false }) {
   const pctFill = Math.min((value / max) * 100, 100)
   const color = inverse
     ? value < 50 ? '#22C55E' : value < 75 ? '#FACC15' : '#EF4444'
-    : '#FFFFFF'
+    : 'var(--text-primary)'
 
   return (
     <div>
       <div className="flex justify-between items-baseline mb-1.5">
-        <span className="text-sm text-white">{label}</span>
-        <span className="text-sm font-mono text-white">{value.toFixed(0)}<span className="text-[#888888]">/100</span></span>
+        <span className="text-sm text-[var(--text-primary)]">{label}</span>
+        <span className="text-sm font-mono text-[var(--text-primary)]">{value.toFixed(0)}<span className="text-[var(--text-muted)]">/100</span></span>
       </div>
-      {sublabel && <p className="text-xs text-[#888888] mb-2">{sublabel}</p>}
-      <div className="h-1.5 bg-[#222222] rounded-full overflow-hidden">
+      {sublabel && <p className="text-xs text-[var(--text-muted)] mb-2">{sublabel}</p>}
+      <div className="h-1.5 bg-[var(--border)] rounded-full overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-300"
           style={{ width: `${pctFill}%`, backgroundColor: color }}
@@ -121,13 +121,13 @@ function DeltaBadge({ delta, format = (v) => v, inverse = false }) {
 // ─── Metric Card ──────────────────────────────────────────────────────────────
 function MetricCard({ title, value, format, delta, deltaFormat, inverse = false, subtitle }) {
   return (
-    <div className="bg-[#111111] border border-[#222222] rounded-lg p-4">
-      <p className="text-xs text-[#888888] uppercase tracking-wider mb-2">{title}</p>
+    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-4">
+      <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-2">{title}</p>
       <div className="flex items-end gap-2 flex-wrap">
-        <AnimatedNumber value={value} format={format} className="text-2xl font-semibold text-white tabular-nums" />
+        <AnimatedNumber value={value} format={format} className="text-2xl font-semibold text-[var(--text-primary)] tabular-nums" />
         {delta != null && <DeltaBadge delta={delta} format={deltaFormat} inverse={inverse} />}
       </div>
-      {subtitle && <p className="text-xs text-[#888888] mt-1">{subtitle}</p>}
+      {subtitle && <p className="text-xs text-[var(--text-muted)] mt-1">{subtitle}</p>}
     </div>
   )
 }
@@ -136,8 +136,8 @@ function MetricCard({ title, value, format, delta, deltaFormat, inverse = false,
 function SectionHeader({ title, subtitle }) {
   return (
     <div className="mb-4">
-      <h3 className="text-sm font-semibold text-white uppercase tracking-wider">{title}</h3>
-      {subtitle && <p className="text-xs text-[#888888] mt-0.5">{subtitle}</p>}
+      <h3 className="text-sm font-semibold text-[var(--text-primary)] uppercase tracking-wider">{title}</h3>
+      {subtitle && <p className="text-xs text-[var(--text-muted)] mt-0.5">{subtitle}</p>}
     </div>
   )
 }
@@ -150,7 +150,7 @@ function Toast({ message, onClose }) {
   }, [onClose])
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#111111] border border-[#333333] text-white text-sm px-4 py-3 rounded-lg shadow-xl">
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[var(--bg-card)] border border-[var(--border-input)] text-[var(--text-primary)] text-sm px-4 py-3 rounded-lg shadow-xl">
       {message}
     </div>
   )
@@ -164,6 +164,7 @@ export default function App() {
   const [developerMargin, setDeveloperMargin] = useState(8)
   const [adBudget, setAdBudget] = useState(500000)
   const [brokerCommission, setBrokerCommission] = useState(2)
+  const [baseCPL, setBaseCPL] = useState(3100)
 
   // Ads layer
   const [pixelSlider, setPixelSlider] = useState(0)
@@ -193,6 +194,7 @@ export default function App() {
   const [toast, setToast] = useState(null)
   const [allActive, setAllActive] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isDark, setIsDark] = useState(true)
 
   const showToast = (msg) => setToast(msg)
 
@@ -227,8 +229,6 @@ export default function App() {
 
   // ─── Core Calculation Engine ──────────────────────────────────────────────
   const calc = useMemo(() => {
-    const baseCPL = 3100
-
     // Ads layer
     const cplAfterPixel = baseCPL * (1 - (pixelSlider / 100) * 0.35)
     const cplAfterRetargeting = cplAfterPixel * (1 - (retargetingSlider / 100) * 0.20)
@@ -326,7 +326,7 @@ export default function App() {
       directModuleScore
     }
   }, [
-    adBudget, flatPrice, developerMargin, brokerCommission,
+    baseCPL, adBudget, flatPrice, developerMargin, brokerCommission,
     pixelSlider, retargetingSlider, landingPageSlider,
     voiceAISlider, speedToLeadSlider, missedCallSlider, whatsappBotSlider,
     nurtureSlider, cabSlider, videoSlider, objectionSlider, warmTransferSlider,
@@ -335,7 +335,6 @@ export default function App() {
 
   // ─── Baseline (zero state) ────────────────────────────────────────────────
   const baseline = useMemo(() => {
-    const baseCPL = 3100
     const baseLeads = adBudget / baseCPL
     const totalLeads = Math.round(baseLeads)
     const connectedLeads = Math.round(totalLeads * 0.35)
@@ -353,7 +352,7 @@ export default function App() {
       revenueFromBookings, grossMargin, brokerCommissionPaid, costPerVisit,
       netGain, connectionRate: 0.35, visitRate: 0.12, bookingRate: 0.08
     }
-  }, [adBudget, flatPrice, developerMargin, brokerCommission])
+  }, [adBudget, flatPrice, developerMargin, brokerCommission, baseCPL])
 
   // ─── 90-Day Projection Data ───────────────────────────────────────────────
   const projectionData = useMemo(() => {
@@ -385,15 +384,6 @@ export default function App() {
 
   // ─── Leak Calculator (zero state vs current) ──────────────────────────────
   const leakCalc = useMemo(() => {
-    const leadsLostToSlowResponse = Math.max(
-      0,
-      Math.round(calc.totalLeads * (1 - calc.finalConnectionRate)) -
-      Math.round(baseline.totalLeads * (1 - 0.35))
-    )
-    const bookingsLost = Math.max(0, calc.bookings - baseline.bookings)
-    const revenueLost = Math.max(0, calc.revenueFromBookings - baseline.revenueFromBookings)
-
-    // Always show current missed opportunities vs potential
     const maxPossibleBookings = calc.actualVisits * 0.45
     const missedBookings = Math.max(0, maxPossibleBookings - calc.bookings)
     const missedRevenue = missedBookings * flatPrice
@@ -421,26 +411,33 @@ export default function App() {
     setAdBudget(Number(cleaned) || 0)
   }
 
+  const handleBaseCPLInput = (val) => {
+    const cleaned = val.replace(/[^0-9]/g, '')
+    setBaseCPL(Number(cleaned) || 0)
+  }
+
+  const inputClass = "w-full bg-transparent border border-[var(--border-input)] rounded px-3 py-2 text-sm text-[var(--text-primary)] focus:outline-none focus:border-[var(--text-primary)] transition-colors"
+
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white font-sans">
+    <div className={`min-h-screen font-sans${!isDark ? ' light' : ''}`} style={{ backgroundColor: 'var(--bg-base)', color: 'var(--text-primary)' }}>
 
       {/* ─── HEADER ─────────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-40 bg-[#0A0A0A] border-b border-[#222222] no-print">
+      <header className="sticky top-0 z-40 border-b border-[var(--border)] no-print" style={{ backgroundColor: 'var(--bg-base)' }}>
         <div className="max-w-[1600px] mx-auto px-4 h-14 flex items-center justify-between">
           {/* Logo */}
           <div>
-            <span className="text-lg font-bold text-white tracking-tight">Celiyo</span>
-            <span className="hidden sm:block text-[10px] text-[#888888] -mt-1">AI CRM ROI Simulator</span>
+            <span className="text-lg font-bold text-[var(--text-primary)] tracking-tight">Celiyo</span>
+            <span className="hidden sm:block text-[10px] text-[var(--text-muted)] -mt-1">AI CRM ROI Simulator</span>
           </div>
 
           {/* Center toggles */}
           <div className="hidden md:flex items-center gap-2">
-            <button className="text-sm px-3 py-1.5 rounded border border-white text-white bg-transparent font-medium">
+            <button className="text-sm px-3 py-1.5 rounded border border-[var(--border-accent)] text-[var(--text-primary)] bg-transparent font-medium">
               Simulator Mode
             </button>
             <button
               onClick={() => showToast('Live Mode — Coming Soon')}
-              className="text-sm px-3 py-1.5 rounded border border-[#333333] text-[#888888] bg-transparent font-medium hover:border-[#555555] transition-colors"
+              className="text-sm px-3 py-1.5 rounded border border-[var(--border-input)] text-[var(--text-muted)] bg-transparent font-medium hover:border-[var(--border-btn)] transition-colors"
             >
               Live Mode
             </button>
@@ -448,14 +445,22 @@ export default function App() {
 
           {/* Right */}
           <div className="flex items-center gap-2">
+            {/* Dark / Light toggle */}
+            <button
+              onClick={() => setIsDark(!isDark)}
+              className="p-1.5 rounded border border-[var(--border-btn)] text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:border-[var(--border-accent)] transition-colors"
+              title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {isDark ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
             <button
               onClick={() => window.print()}
-              className="text-sm px-3 py-1.5 rounded border border-[#444444] text-white bg-transparent font-medium hover:border-white transition-colors"
+              className="text-sm px-3 py-1.5 rounded border border-[var(--border-btn)] text-[var(--text-primary)] bg-transparent font-medium hover:border-[var(--border-accent)] transition-colors"
             >
               Export PDF
             </button>
             <button
-              className="md:hidden p-1.5 text-[#888888]"
+              className="md:hidden p-1.5 text-[var(--text-muted)]"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
@@ -465,13 +470,13 @@ export default function App() {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-[#222222] bg-[#0A0A0A] px-4 py-3 flex flex-col gap-2">
-            <button className="text-sm px-3 py-2 rounded border border-white text-white bg-transparent font-medium text-left">
+          <div className="md:hidden border-t border-[var(--border)] px-4 py-3 flex flex-col gap-2" style={{ backgroundColor: 'var(--bg-base)' }}>
+            <button className="text-sm px-3 py-2 rounded border border-[var(--border-accent)] text-[var(--text-primary)] bg-transparent font-medium text-left">
               Simulator Mode
             </button>
             <button
               onClick={() => { showToast('Live Mode — Coming Soon'); setMobileMenuOpen(false) }}
-              className="text-sm px-3 py-2 rounded border border-[#333333] text-[#888888] bg-transparent font-medium text-left"
+              className="text-sm px-3 py-2 rounded border border-[var(--border-input)] text-[var(--text-muted)] bg-transparent font-medium text-left"
             >
               Live Mode
             </button>
@@ -480,7 +485,7 @@ export default function App() {
       </header>
 
       {/* ─── MAIN CONTENT ────────────────────────────────────────────────── */}
-      <main className="max-w-[1600px] mx-auto px-4 py-6">
+      <main className="max-w-[1600px] mx-auto px-4 py-4 h-[calc(100vh-56px)] print:h-auto flex flex-col">
 
         {/* Print header */}
         <div className="hidden print:block mb-6">
@@ -488,80 +493,93 @@ export default function App() {
           <p className="text-sm text-gray-600">{projectName} · Generated {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col lg:flex-row gap-6 flex-1 min-h-0">
 
-          {/* ─── LEFT PANEL — INPUTS ──────────────────────────────────────── */}
-          <div className="w-full lg:w-[40%] space-y-6 no-print">
+          {/* ─── LEFT PANEL — INPUTS (scrollable) ─────────────────────────── */}
+          <div className="w-full lg:w-[40%] overflow-y-auto no-print space-y-6 pr-1">
 
             {/* Section 1 — Project */}
-            <div className="bg-[#111111] border border-[#222222] rounded-lg p-5">
+            <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-5">
               <SectionHeader title="Your Project" />
 
               <div className="space-y-3">
                 <div>
-                  <label className="text-xs text-[#888888] block mb-1">Developer / Project Name</label>
+                  <label className="text-xs text-[var(--text-muted)] block mb-1">Developer / Project Name</label>
                   <input
                     type="text"
                     value={projectName}
                     onChange={(e) => setProjectName(e.target.value)}
-                    className="w-full bg-transparent border border-[#333333] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-white transition-colors"
+                    className={inputClass}
                     placeholder="e.g. Prestige Lakeside"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs text-[#888888] block mb-1">Average Flat Price (₹)</label>
+                  <label className="text-xs text-[var(--text-muted)] block mb-1">Average Flat Price (₹)</label>
                   <input
                     type="text"
                     value={flatPrice.toLocaleString('en-IN')}
                     onChange={(e) => handleFlatPriceInput(e.target.value)}
-                    className="w-full bg-transparent border border-[#333333] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-white transition-colors"
+                    className={inputClass}
                     placeholder="80,00,000"
                   />
-                  <p className="text-xs text-[#888888] mt-1">{inr(flatPrice)}</p>
+                  <p className="text-xs text-[var(--text-muted)] mt-1">{inr(flatPrice)}</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-xs text-[#888888] block mb-1">Developer Margin %</label>
+                    <label className="text-xs text-[var(--text-muted)] block mb-1">Developer Margin %</label>
                     <input
                       type="number"
                       min="1"
                       max="30"
                       value={developerMargin}
                       onChange={(e) => setDeveloperMargin(Number(e.target.value))}
-                      className="w-full bg-transparent border border-[#333333] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-white transition-colors"
+                      className={inputClass}
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-[#888888] block mb-1">Broker Commission %</label>
+                    <label className="text-xs text-[var(--text-muted)] block mb-1">Broker Commission %</label>
                     <input
                       type="number"
                       min="0"
                       max="10"
                       value={brokerCommission}
                       onChange={(e) => setBrokerCommission(Number(e.target.value))}
-                      className="w-full bg-transparent border border-[#333333] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-white transition-colors"
+                      className={inputClass}
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label className="text-xs text-[#888888] block mb-1">Monthly Ad Budget (₹)</label>
-                  <input
-                    type="text"
-                    value={adBudget.toLocaleString('en-IN')}
-                    onChange={(e) => handleAdBudgetInput(e.target.value)}
-                    className="w-full bg-transparent border border-[#333333] rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-white transition-colors"
-                    placeholder="5,00,000"
-                  />
-                  <p className="text-xs text-[#888888] mt-1">{inr(adBudget)}</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs text-[var(--text-muted)] block mb-1">Monthly Ad Budget (₹)</label>
+                    <input
+                      type="text"
+                      value={adBudget.toLocaleString('en-IN')}
+                      onChange={(e) => handleAdBudgetInput(e.target.value)}
+                      className={inputClass}
+                      placeholder="5,00,000"
+                    />
+                    <p className="text-xs text-[var(--text-muted)] mt-1">{inr(adBudget)}</p>
+                  </div>
+                  <div>
+                    <label className="text-xs text-[var(--text-muted)] block mb-1">Base Cost Per Lead (₹)</label>
+                    <input
+                      type="text"
+                      value={baseCPL.toLocaleString('en-IN')}
+                      onChange={(e) => handleBaseCPLInput(e.target.value)}
+                      className={inputClass}
+                      placeholder="3,100"
+                    />
+                    <p className="text-xs text-[var(--text-muted)] mt-1">{inrFull(baseCPL)}</p>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Section 2 — Ads Layer */}
-            <div className="bg-[#111111] border border-[#222222] rounded-lg p-5">
+            <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-5">
               <SectionHeader title="Ads & Lead Generation" subtitle="Managed by Celiyo Ads Service" />
               <Slider label="Pixel & CAPI Integration" value={pixelSlider} onChange={setPixelSlider}
                 description="Better targeting = cheaper leads" />
@@ -572,7 +590,7 @@ export default function App() {
             </div>
 
             {/* Section 3 — Response Layer */}
-            <div className="bg-[#111111] border border-[#222222] rounded-lg p-5">
+            <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-5">
               <SectionHeader title="Speed & Response Layer" />
               <Slider label="24/7 Voice AI (Midnight Pickup)" value={voiceAISlider} onChange={setVoiceAISlider}
                 description="Picks up every call within 2 rings, 24/7" />
@@ -585,7 +603,7 @@ export default function App() {
             </div>
 
             {/* Section 4 — Site Visit Layer */}
-            <div className="bg-[#111111] border border-[#222222] rounded-lg p-5">
+            <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-5">
               <SectionHeader title="Site Visit Layer" />
               <Slider label="Auto Nurture Sequence" value={nurtureSlider} onChange={setNurtureSlider}
                 description="Keeps prospect warm until they visit" />
@@ -600,7 +618,7 @@ export default function App() {
             </div>
 
             {/* Section 5 — Booking & Brand */}
-            <div className="bg-[#111111] border border-[#222222] rounded-lg p-5">
+            <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-5">
               <SectionHeader title="Booking & Brand Layer" />
               <Slider label="Sales Coaching Intelligence" value={coachingSlider} onChange={setCoachingSlider}
                 description="Weekly AI report on why deals are won and lost" />
@@ -615,14 +633,14 @@ export default function App() {
             {/* Activate All */}
             <button
               onClick={handleActivateAll}
-              className="w-full py-3 rounded-lg border border-white text-white bg-transparent font-medium text-sm hover:bg-white hover:text-black transition-all duration-200"
+              className={`w-full py-3 rounded-lg border border-[var(--border-accent)] text-[var(--text-primary)] bg-transparent font-medium text-sm transition-all duration-200 ${isDark ? 'hover:bg-white hover:text-black' : 'hover:bg-gray-900 hover:text-white'}`}
             >
               {isAllActive ? 'Reset to Zero' : 'Activate All Modules →'}
             </button>
           </div>
 
           {/* ─── RIGHT PANEL — METRICS ─────────────────────────────────────── */}
-          <div className="w-full lg:w-[60%] space-y-4">
+          <div className="w-full lg:w-[60%] overflow-y-auto space-y-4 pb-4">
 
             {/* Print-only summary */}
             <div className="hidden print:block text-sm mb-4">
@@ -690,31 +708,222 @@ export default function App() {
 
             {/* Row 3 — Revenue & Savings */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="bg-[#111111] border border-[#222222] rounded-lg p-5">
-                <p className="text-xs text-[#888888] uppercase tracking-wider mb-2">Projected Revenue / Month</p>
+              <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-5">
+                <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-2">Projected Revenue / Month</p>
                 <AnimatedNumber
                   value={calc.revenueFromBookings}
                   format={(v) => inr(v)}
-                  className="text-3xl font-bold text-white"
+                  className="text-3xl font-bold text-[var(--text-primary)]"
                 />
-                <p className="text-xs text-[#888888] mt-2">
+                <p className="text-xs text-[var(--text-muted)] mt-2">
                   {calc.bookings.toFixed(1)} bookings × {inr(flatPrice)}
                 </p>
               </div>
-              <div className="bg-[#111111] border border-[#222222] rounded-lg p-5">
-                <p className="text-xs text-[#888888] uppercase tracking-wider mb-2">Broker Commission Saved</p>
+              <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-5">
+                <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-2">Broker Commission Saved</p>
                 <AnimatedNumber
                   value={calc.commissionSaved}
                   format={(v) => inr(v)}
                   className="text-3xl font-bold text-[#22C55E]"
                 />
-                <p className="text-xs text-[#888888] mt-2">From direct lead bookings</p>
+                <p className="text-xs text-[var(--text-muted)] mt-2">From direct lead bookings</p>
               </div>
             </div>
 
-            {/* Row 4 — Health Indicators */}
-            <div className="bg-[#111111] border border-[#222222] rounded-lg p-5">
-              <p className="text-xs text-[#888888] uppercase tracking-wider mb-4">Health Indicators</p>
+            {/* Row 5 — Leak Calculator */}
+            <div className="bg-[var(--bg-pain)] border border-[var(--border-pain)] rounded-lg p-5">
+              <p className="text-xs text-[var(--text-pain)] uppercase tracking-wider mb-4">Leads You Are Currently Losing</p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <p className="text-2xl font-bold text-[var(--text-primary)]">
+                    <AnimatedNumber
+                      value={leakCalc.leadsLostToSlowResponse}
+                      format={(v) => Math.round(v).toLocaleString('en-IN')}
+                    />
+                  </p>
+                  <p className="text-xs text-[var(--text-muted)] mt-1">Leads lost to slow response / mo</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-[var(--text-primary)]">
+                    <AnimatedNumber
+                      value={Number(leakCalc.estimatedBookingsLost)}
+                      format={(v) => v.toFixed(1)}
+                    />
+                  </p>
+                  <p className="text-xs text-[var(--text-muted)] mt-1">Estimated bookings lost / mo</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-[var(--text-pain)]">
+                    <AnimatedNumber
+                      value={leakCalc.revenueLost}
+                      format={(v) => inr(v)}
+                    />
+                  </p>
+                  <p className="text-xs text-[var(--text-muted)] mt-1">Revenue walking out the door / mo</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Row 6 — Response Time */}
+            <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-5">
+              <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-3">Response Time</p>
+              <div className="flex items-end justify-between">
+                <div>
+                  <AnimatedNumber
+                    value={calc.finalResponseTime}
+                    format={(v) => fmtResponseTime(v)}
+                    className="text-3xl font-bold text-[var(--text-primary)]"
+                  />
+                  <p className="text-xs text-[var(--text-muted)] mt-1">Avg. time to first contact</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm text-[var(--text-muted)]">Baseline</p>
+                  <p className="text-lg font-semibold text-[var(--text-dim)]">4 hrs 40 min</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Row 7 — ROI Summary */}
+            <div className="bg-[var(--bg-card)] border border-[var(--border-accent)] rounded-lg p-5">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-1">System Cost / Month</p>
+                  <p className="text-lg font-semibold text-[var(--text-muted)]">₹25,000</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-1">Your ROI</p>
+                  <AnimatedNumber
+                    value={calc.roiMultiple}
+                    format={(v) => `${v.toFixed(1)}x`}
+                    className="text-4xl font-bold text-[var(--text-primary)]"
+                  />
+                </div>
+              </div>
+              <div className="mt-4 pt-4 border-t border-[var(--border)]">
+                <p className="text-sm text-[var(--text-muted)]">
+                  ₹25,000 invested →{' '}
+                  <span className="text-[var(--text-primary)] font-medium">{inr(calc.netGain)}</span> net gain this month
+                </p>
+                <p className="text-xs text-[var(--text-muted)] mt-1">
+                  One booking covers{' '}
+                  <span className="text-[var(--text-primary)]">
+                    {calc.bookings > 0 ? ((flatPrice * developerMargin / 100) / 25000).toFixed(1) : '—'}
+                  </span> months of Celiyo
+                </p>
+              </div>
+            </div>
+
+            {/* Row 8 — Comparison Table */}
+            <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-5 overflow-x-auto">
+              <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-4">Before vs After Comparison</p>
+              <table className="w-full min-w-[600px] text-sm">
+                <thead>
+                  <tr className="border-b border-[var(--border)]">
+                    <th className="text-left text-[var(--text-muted)] font-normal pb-3 pr-4">Metric</th>
+                    <th className="text-right text-[var(--text-muted)] font-normal pb-3 pr-4">Without Celiyo</th>
+                    <th className="text-right text-[var(--text-muted)] font-normal pb-3 pr-4">With Celiyo</th>
+                    <th className="text-right text-[var(--text-muted)] font-normal pb-3">Delta</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[var(--border)]">
+                  {[
+                    { label: 'Monthly Leads', baseline: baseline.totalLeads, current: calc.totalLeads, fmt: (v) => Math.round(v).toLocaleString('en-IN'), inverse: false },
+                    { label: 'Cost Per Lead', baseline: baseline.cpl, current: calc.finalCPL, fmt: inrFull, inverse: true },
+                    { label: 'Site Visits', baseline: baseline.siteVisits, current: calc.actualVisits, fmt: (v) => Math.round(v), inverse: false },
+                    { label: 'Bookings / Month', baseline: baseline.bookings, current: calc.bookings, fmt: (v) => v.toFixed(1), inverse: false },
+                    { label: 'Revenue / Month', baseline: baseline.revenueFromBookings, current: calc.revenueFromBookings, fmt: inr, inverse: false },
+                    { label: 'Broker Commission Paid', baseline: baseline.brokerCommissionPaid, current: calc.brokerCommissionPaid, fmt: inr, inverse: true },
+                    { label: 'System Cost', baseline: 0, current: 25000, fmt: inrFull, inverse: true },
+                    { label: 'Net Gain / Month', baseline: baseline.netGain, current: calc.netGain, fmt: inr, inverse: false },
+                  ].map((row) => {
+                    const delta = row.current - row.baseline
+                    const isPositive = row.inverse ? delta < 0 : delta > 0
+                    return (
+                      <tr key={row.label}>
+                        <td className="py-2.5 pr-4 text-[var(--text-muted)]">{row.label}</td>
+                        <td className="py-2.5 pr-4 text-right text-[var(--text-dim)]">{row.fmt(row.baseline)}</td>
+                        <td className="py-2.5 pr-4 text-right text-[var(--text-primary)] font-medium">{row.fmt(row.current)}</td>
+                        <td className={`py-2.5 text-right text-xs font-medium ${isPositive ? 'text-[#22C55E]' : delta === 0 ? 'text-[var(--text-muted)]' : 'text-[#EF4444]'}`}>
+                          {delta === 0 ? '—' : `${delta > 0 ? '+' : ''}${row.fmt(delta)}`}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Row 9 — 90-Day Projection */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Bookings chart */}
+              <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-5">
+                <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-1">90-Day Bookings Projection</p>
+                <p className="text-xs text-[var(--text-dim)] mb-4">Bookings per month over 3 months</p>
+                <ResponsiveContainer width="100%" height={200}>
+                  <LineChart data={projectionData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <XAxis dataKey="month" tick={{ fontSize: 11, fill: 'var(--text-dim)' }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fontSize: 11, fill: 'var(--text-dim)' }} axisLine={false} tickLine={false} />
+                    <RechartsTooltip
+                      contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '6px', fontSize: '12px' }}
+                      labelStyle={{ color: 'var(--text-muted)' }}
+                      itemStyle={{ color: 'var(--text-primary)' }}
+                    />
+                    <Line type="monotone" dataKey="without" stroke="var(--border-input)" strokeWidth={2} dot={false} name="Without Celiyo" />
+                    <Line type="monotone" dataKey="with" stroke="var(--text-primary)" strokeWidth={2} dot={false} name="With Celiyo" />
+                  </LineChart>
+                </ResponsiveContainer>
+                <div className="flex gap-4 mt-3">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-4 h-0.5 bg-[var(--border-input)]" />
+                    <span className="text-xs text-[var(--text-dim)]">Without Celiyo</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-4 h-0.5 bg-[var(--text-primary)]" />
+                    <span className="text-xs text-[var(--text-muted)]">With Celiyo</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Revenue chart */}
+              <div className="hidden md:block bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-5">
+                <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-1">90-Day Revenue Projection</p>
+                <p className="text-xs text-[var(--text-dim)] mb-4">Revenue in Lakhs (₹L) per month</p>
+                <ResponsiveContainer width="100%" height={200}>
+                  <AreaChart data={projectionData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="withFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="var(--text-primary)" stopOpacity={0.15} />
+                        <stop offset="95%" stopColor="var(--text-primary)" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <XAxis dataKey="month" tick={{ fontSize: 11, fill: 'var(--text-dim)' }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fontSize: 11, fill: 'var(--text-dim)' }} axisLine={false} tickLine={false} />
+                    <RechartsTooltip
+                      contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '6px', fontSize: '12px' }}
+                      labelStyle={{ color: 'var(--text-muted)' }}
+                      itemStyle={{ color: 'var(--text-primary)' }}
+                      formatter={(v) => [`₹${v.toFixed(1)}L`, '']}
+                    />
+                    <Area type="monotone" dataKey="revenueWithout" stroke="var(--border-input)" strokeWidth={2} fill="none" name="Without Celiyo" />
+                    <Area type="monotone" dataKey="revenueWith" stroke="var(--text-primary)" strokeWidth={2} fill="url(#withFill)" name="With Celiyo" />
+                  </AreaChart>
+                </ResponsiveContainer>
+                <div className="flex gap-4 mt-3">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-4 h-0.5 bg-[var(--border-input)]" />
+                    <span className="text-xs text-[var(--text-dim)]">Without Celiyo</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-4 h-0.5 bg-[var(--text-primary)]" />
+                    <span className="text-xs text-[var(--text-muted)]">With Celiyo</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Row 4 — Health Indicators (moved to end) */}
+            <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-lg p-5">
+              <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-4">Health Indicators</p>
               <div className="space-y-5">
                 <ProgressBar
                   value={calc.responsivenessScore}
@@ -735,227 +944,34 @@ export default function App() {
               </div>
             </div>
 
-            {/* Row 5 — Leak Calculator */}
-            <div className="bg-[#1A0A0A] border border-[#3A1A1A] rounded-lg p-5">
-              <p className="text-xs text-[#CC4444] uppercase tracking-wider mb-4">Leads You Are Currently Losing</p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <p className="text-2xl font-bold text-white">
-                    <AnimatedNumber
-                      value={leakCalc.leadsLostToSlowResponse}
-                      format={(v) => Math.round(v).toLocaleString('en-IN')}
-                    />
-                  </p>
-                  <p className="text-xs text-[#888888] mt-1">Leads lost to slow response / mo</p>
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-white">
-                    <AnimatedNumber
-                      value={Number(leakCalc.estimatedBookingsLost)}
-                      format={(v) => v.toFixed(1)}
-                    />
-                  </p>
-                  <p className="text-xs text-[#888888] mt-1">Estimated bookings lost / mo</p>
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-[#CC4444]">
-                    <AnimatedNumber
-                      value={leakCalc.revenueLost}
-                      format={(v) => inr(v)}
-                    />
-                  </p>
-                  <p className="text-xs text-[#888888] mt-1">Revenue walking out the door / mo</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Row 6 — Response Time */}
-            <div className="bg-[#111111] border border-[#222222] rounded-lg p-5">
-              <p className="text-xs text-[#888888] uppercase tracking-wider mb-3">Response Time</p>
-              <div className="flex items-end justify-between">
-                <div>
-                  <AnimatedNumber
-                    value={calc.finalResponseTime}
-                    format={(v) => fmtResponseTime(v)}
-                    className="text-3xl font-bold text-white"
-                  />
-                  <p className="text-xs text-[#888888] mt-1">Avg. time to first contact</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm text-[#888888]">Baseline</p>
-                  <p className="text-lg font-semibold text-[#555555]">4 hrs 40 min</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Row 7 — ROI Summary */}
-            <div className="bg-[#111111] border border-white rounded-lg p-5">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-xs text-[#888888] uppercase tracking-wider mb-1">System Cost / Month</p>
-                  <p className="text-lg font-semibold text-[#888888]">₹25,000</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-xs text-[#888888] uppercase tracking-wider mb-1">Your ROI</p>
-                  <AnimatedNumber
-                    value={calc.roiMultiple}
-                    format={(v) => `${v.toFixed(1)}x`}
-                    className="text-4xl font-bold text-white"
-                  />
-                </div>
-              </div>
-              <div className="mt-4 pt-4 border-t border-[#222222]">
-                <p className="text-sm text-[#888888]">
-                  ₹25,000 invested →{' '}
-                  <span className="text-white font-medium">{inr(calc.netGain)}</span> net gain this month
-                </p>
-                <p className="text-xs text-[#888888] mt-1">
-                  One booking covers{' '}
-                  <span className="text-white">
-                    {calc.bookings > 0 ? ((flatPrice * developerMargin / 100) / 25000).toFixed(1) : '—'}
-                  </span> months of Celiyo
-                </p>
-              </div>
+            {/* Print footer */}
+            <div className="hidden print:block mt-8 pt-4 border-t border-gray-300 text-center">
+              <p className="text-xs text-gray-500">Generated by Celiyo — AI CRM for Real Estate</p>
             </div>
           </div>
-        </div>
-
-        {/* ─── FULL WIDTH SECTIONS ────────────────────────────────────────── */}
-
-        {/* Row 8 — Comparison Table */}
-        <div className="mt-6 bg-[#111111] border border-[#222222] rounded-lg p-5 overflow-x-auto">
-          <p className="text-xs text-[#888888] uppercase tracking-wider mb-4">Before vs After Comparison</p>
-          <table className="w-full min-w-[600px] text-sm">
-            <thead>
-              <tr className="border-b border-[#222222]">
-                <th className="text-left text-[#888888] font-normal pb-3 pr-4">Metric</th>
-                <th className="text-right text-[#888888] font-normal pb-3 pr-4">Without Celiyo</th>
-                <th className="text-right text-[#888888] font-normal pb-3 pr-4">With Celiyo</th>
-                <th className="text-right text-[#888888] font-normal pb-3">Delta</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#1A1A1A]">
-              {[
-                { label: 'Monthly Leads', baseline: baseline.totalLeads, current: calc.totalLeads, fmt: (v) => Math.round(v).toLocaleString('en-IN'), inverse: false },
-                { label: 'Cost Per Lead', baseline: baseline.cpl, current: calc.finalCPL, fmt: inrFull, inverse: true },
-                { label: 'Site Visits', baseline: baseline.siteVisits, current: calc.actualVisits, fmt: (v) => Math.round(v), inverse: false },
-                { label: 'Bookings / Month', baseline: baseline.bookings, current: calc.bookings, fmt: (v) => v.toFixed(1), inverse: false },
-                { label: 'Revenue / Month', baseline: baseline.revenueFromBookings, current: calc.revenueFromBookings, fmt: inr, inverse: false },
-                { label: 'Broker Commission Paid', baseline: baseline.brokerCommissionPaid, current: calc.brokerCommissionPaid, fmt: inr, inverse: true },
-                { label: 'System Cost', baseline: 0, current: 25000, fmt: inrFull, inverse: true },
-                { label: 'Net Gain / Month', baseline: baseline.netGain, current: calc.netGain, fmt: inr, inverse: false },
-              ].map((row) => {
-                const delta = row.current - row.baseline
-                const isPositive = row.inverse ? delta < 0 : delta > 0
-                return (
-                  <tr key={row.label}>
-                    <td className="py-2.5 pr-4 text-[#888888]">{row.label}</td>
-                    <td className="py-2.5 pr-4 text-right text-[#555555]">{row.fmt(row.baseline)}</td>
-                    <td className="py-2.5 pr-4 text-right text-white font-medium">{row.fmt(row.current)}</td>
-                    <td className={`py-2.5 text-right text-xs font-medium ${isPositive ? 'text-[#22C55E]' : delta === 0 ? 'text-[#888888]' : 'text-[#EF4444]'}`}>
-                      {delta === 0 ? '—' : `${delta > 0 ? '+' : ''}${row.fmt(delta)}`}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Row 9 — 90-Day Projection */}
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Bookings chart */}
-          <div className="bg-[#111111] border border-[#222222] rounded-lg p-5">
-            <p className="text-xs text-[#888888] uppercase tracking-wider mb-1">90-Day Bookings Projection</p>
-            <p className="text-xs text-[#555555] mb-4">Bookings per month over 3 months</p>
-            <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={projectionData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#555555' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: '#555555' }} axisLine={false} tickLine={false} />
-                <RechartsTooltip
-                  contentStyle={{ background: '#111111', border: '1px solid #222222', borderRadius: '6px', fontSize: '12px' }}
-                  labelStyle={{ color: '#888888' }}
-                  itemStyle={{ color: '#FFFFFF' }}
-                />
-                <Line type="monotone" dataKey="without" stroke="#333333" strokeWidth={2} dot={false} name="Without Celiyo" />
-                <Line type="monotone" dataKey="with" stroke="#FFFFFF" strokeWidth={2} dot={false} name="With Celiyo" />
-              </LineChart>
-            </ResponsiveContainer>
-            <div className="flex gap-4 mt-3">
-              <div className="flex items-center gap-1.5">
-                <div className="w-4 h-0.5 bg-[#333333]" />
-                <span className="text-xs text-[#555555]">Without Celiyo</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-4 h-0.5 bg-white" />
-                <span className="text-xs text-[#888888]">With Celiyo</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Revenue chart */}
-          <div className="hidden md:block bg-[#111111] border border-[#222222] rounded-lg p-5">
-            <p className="text-xs text-[#888888] uppercase tracking-wider mb-1">90-Day Revenue Projection</p>
-            <p className="text-xs text-[#555555] mb-4">Revenue in Lakhs (₹L) per month</p>
-            <ResponsiveContainer width="100%" height={200}>
-              <AreaChart data={projectionData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="withFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#FFFFFF" stopOpacity={0.1} />
-                    <stop offset="95%" stopColor="#FFFFFF" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#555555' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 11, fill: '#555555' }} axisLine={false} tickLine={false} />
-                <RechartsTooltip
-                  contentStyle={{ background: '#111111', border: '1px solid #222222', borderRadius: '6px', fontSize: '12px' }}
-                  labelStyle={{ color: '#888888' }}
-                  itemStyle={{ color: '#FFFFFF' }}
-                  formatter={(v) => [`₹${v.toFixed(1)}L`, '']}
-                />
-                <Area type="monotone" dataKey="revenueWithout" stroke="#333333" strokeWidth={2} fill="none" name="Without Celiyo" />
-                <Area type="monotone" dataKey="revenueWith" stroke="#FFFFFF" strokeWidth={2} fill="url(#withFill)" name="With Celiyo" />
-              </AreaChart>
-            </ResponsiveContainer>
-            <div className="flex gap-4 mt-3">
-              <div className="flex items-center gap-1.5">
-                <div className="w-4 h-0.5 bg-[#333333]" />
-                <span className="text-xs text-[#555555]">Without Celiyo</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-4 h-0.5 bg-white" />
-                <span className="text-xs text-[#888888]">With Celiyo</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Print footer */}
-        <div className="hidden print:block mt-8 pt-4 border-t border-gray-300 text-center">
-          <p className="text-xs text-gray-500">Generated by Celiyo — AI CRM for Real Estate</p>
         </div>
       </main>
 
       {/* ─── MOBILE STICKY BAR ───────────────────────────────────────────── */}
-      <div className="fixed bottom-0 left-0 right-0 md:hidden bg-[#111111] border-t border-[#222222] px-4 py-3 no-print z-30">
+      <div className="fixed bottom-0 left-0 right-0 md:hidden bg-[var(--bg-card)] border-t border-[var(--border)] px-4 py-3 no-print z-30">
         <div className="grid grid-cols-3 gap-2 text-center">
           <div>
-            <p className="text-lg font-bold text-white">
+            <p className="text-lg font-bold text-[var(--text-primary)]">
               <AnimatedNumber value={calc.bookings} format={(v) => v.toFixed(1)} />
             </p>
-            <p className="text-[10px] text-[#888888]">Bookings/mo</p>
+            <p className="text-[10px] text-[var(--text-muted)]">Bookings/mo</p>
           </div>
           <div>
-            <p className="text-lg font-bold text-white">
+            <p className="text-lg font-bold text-[var(--text-primary)]">
               <AnimatedNumber value={calc.revenueFromBookings} format={(v) => inr(v)} />
             </p>
-            <p className="text-[10px] text-[#888888]">Revenue/mo</p>
+            <p className="text-[10px] text-[var(--text-muted)]">Revenue/mo</p>
           </div>
           <div>
-            <p className="text-lg font-bold text-white">
+            <p className="text-lg font-bold text-[var(--text-primary)]">
               <AnimatedNumber value={calc.roiMultiple} format={(v) => `${v.toFixed(1)}x`} />
             </p>
-            <p className="text-[10px] text-[#888888]">ROI</p>
+            <p className="text-[10px] text-[var(--text-muted)]">ROI</p>
           </div>
         </div>
       </div>
